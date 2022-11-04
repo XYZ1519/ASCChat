@@ -1,36 +1,33 @@
-package com.example.ascchat.chatadapter
+package com.example.ascchat.messageradapter
 
 import butterknife.Setter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.amity.socialcloud.sdk.chat.channel.AmityChannel
-import com.amity.socialcloud.sdk.extension.adapter.AmityChannelAdapter
+import com.amity.socialcloud.sdk.chat.message.AmityMessage
+import com.amity.socialcloud.sdk.extension.adapter.AmityMessageAdapter
 import com.example.ascchat.R
 
-class ChatAdapter(
+class MessageAdapter(
     private val listener: ListListener
-) : AmityChannelAdapter<RecyclerView.ViewHolder>(object :
-    DiffUtil.ItemCallback<AmityChannel>() {
+) : AmityMessageAdapter<RecyclerView.ViewHolder>(object :
+    DiffUtil.ItemCallback<AmityMessage>() {
 
-    override fun areItemsTheSame(oldItem: AmityChannel, newItem: AmityChannel): Boolean {
-        return oldItem.getChannelId() == newItem.getChannelId()
+    override fun areItemsTheSame(oldItem: AmityMessage, newItem: AmityMessage): Boolean {
+        return oldItem.getMessageId() == newItem.getMessageId()
     }
 
-    override fun areContentsTheSame(oldItem: AmityChannel, newItem: AmityChannel): Boolean {
-        return oldItem.getChannelId() == newItem.getChannelId()
+    override fun areContentsTheSame(oldItem: AmityMessage, newItem: AmityMessage): Boolean {
+        return oldItem.getMessageId() == newItem.getMessageId()
                 && oldItem.getCreatedAt() == newItem.getCreatedAt()
-                && oldItem.getDisplayName() == newItem.getDisplayName()
-                && oldItem.getMemberCount() == newItem.getMemberCount()
     }
 }) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ChatViewHolder(
+        return MessageViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.channel_list, parent, false)
+                .inflate(R.layout.message_list, parent, false)
         )
     }
 
@@ -38,15 +35,15 @@ class ChatAdapter(
         val channel = getItem(position)
         val visibility = Setter { view: View, value: Int?, index: Int -> view.visibility = value!! }
         if (channel == null) {
-            renderLoadingItem(holder as ChatViewHolder, visibility, position)
+            renderLoadingItem(holder as MessageViewHolder, visibility, position)
         } else {
-            (holder as ChatViewHolder).bind(channel)
+            (holder as MessageViewHolder).bind(channel)
             addOnClickListener(channel, holder, position)
         }
     }
 
     private fun renderLoadingItem(
-        holder: ChatViewHolder,
+        holder: MessageViewHolder,
         visibility: Setter<View, Int?>,
         position: Int
     ) {
@@ -54,7 +51,7 @@ class ChatAdapter(
     }
 
     private fun addOnClickListener(
-        message: AmityChannel,
+        message: AmityMessage,
         holder: RecyclerView.ViewHolder,
         position: Int
     ) {

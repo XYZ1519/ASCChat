@@ -28,9 +28,9 @@ class RecentChatPage : AppCompatActivity(), ListListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recent_chat_page)
         findViewById<TextView>(R.id.channelID).text = "UserId1"
+
         initChatFragment()
         initChannelRepository()
-
     }
 
     private fun initChatFragment() {
