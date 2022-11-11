@@ -9,9 +9,7 @@ import com.example.ascchat.R
 class MessageViewHolder(itemsView: View) : RecyclerView.ViewHolder(itemsView) {
 
     fun bind(item: AmityMessage) {
-        itemView.apply {
-            addMessageToView(this, item)
-        }
+        addMessageToView(itemView, item)
     }
 
     private fun addMessageToView(view: View, item: AmityMessage) {

@@ -24,9 +24,8 @@ class MainActivity : AppCompatActivity() {
         authenticate()
     }
     fun authenticate() {
-        AmityCoreClient.login(userId = "userId 2")
-            .displayName(displayName = "xyz") // optional
-            .authToken(authToken = "token") // optional
+        AmityCoreClient.login(userId = "userId 6")
+            .displayName(displayName = "Jose Miguel") // optional
             .build()
             .submit()
             .doOnComplete {

@@ -11,25 +11,29 @@ class ChatViewHolder(itemsView: View) : RecyclerView.ViewHolder(itemsView) {
     var userRepository = AmityCoreClient.newUserRepository()
 
     fun bind(item: AmityChannel) {
-        itemView.apply {
-            addMessageToView(this, item)
-        }
+        addMessageToView(itemView, item)
     }
 
     private fun addMessageToView(view: View, item: AmityChannel) {
-        view.findViewById<TextView>(R.id.chId).text = item.getDisplayName()
-        item.getMetadata()?.let { metadataObject ->
-            if(metadataObject.getAsJsonArray("USER_IDS") != null) {
-                if(metadataObject.getAsJsonArray("USER_IDS").size() > 1) {
-                    metadataObject.getAsJsonArray("USER_IDS").map {
-                        if (!it.asString.equals(
-                                userRepository.getCurrentUser().blockingFirst().getDisplayName()
-                            )
-                        )
-                        view.findViewById<TextView>(R.id.chId).text = it.asString
-                    }
+        val chatIdTextView = view.findViewById<TextView>(R.id.chId)
+        chatIdTextView.text = item.getDisplayName()
+        item.getMetadata()?.also { metadataObject ->
+            if (metadataObject.getAsJsonArray(USER_IDS) == null) {
+                return
+            }
+            if (metadataObject.getAsJsonArray(USER_IDS).size() <= 1) {
+                return
+            }
+            metadataObject.getAsJsonArray(USER_IDS).map {
+                val userId = it.asString
+                if(!userId.equals(userRepository.getCurrentUser().blockingFirst().getDisplayName())){
+                    chatIdTextView.text = userId
                 }
             }
         }
+    }
+
+    companion object {
+        private const val USER_IDS = "USER_IDS"
     }
 }

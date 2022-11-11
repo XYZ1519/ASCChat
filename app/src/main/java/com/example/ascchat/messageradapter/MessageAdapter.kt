@@ -1,19 +1,18 @@
 package com.example.ascchat.messageradapter
 
-import butterknife.Setter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import butterknife.Setter
 import com.amity.socialcloud.sdk.chat.message.AmityMessage
 import com.amity.socialcloud.sdk.extension.adapter.AmityMessageAdapter
 import com.example.ascchat.R
 
 class MessageAdapter(
     private val listener: ListListener
-) : AmityMessageAdapter<RecyclerView.ViewHolder>(object :
-    DiffUtil.ItemCallback<AmityMessage>() {
+) : AmityMessageAdapter<RecyclerView.ViewHolder>(object : DiffUtil.ItemCallback<AmityMessage>() {
 
     override fun areItemsTheSame(oldItem: AmityMessage, newItem: AmityMessage): Boolean {
         return oldItem.getMessageId() == newItem.getMessageId()
