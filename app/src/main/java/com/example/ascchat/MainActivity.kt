@@ -1,16 +1,10 @@
 package com.example.ascchat
 
-import android.content.ClipData.newIntent
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.amity.socialcloud.sdk.AmityCoreClient
 import com.amity.socialcloud.sdk.AmityEndpoint
-import com.amity.socialcloud.sdk.chat.AmityChatClient
-import com.amity.socialcloud.sdk.chat.channel.AmityChannel
-import com.amity.socialcloud.sdk.chat.channel.AmityChannelRepository
-import com.amity.socialcloud.sdk.core.AmityTags
-import com.google.gson.JsonObject
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

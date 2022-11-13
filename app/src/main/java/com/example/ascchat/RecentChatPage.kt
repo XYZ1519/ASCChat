@@ -1,16 +1,14 @@
 package com.example.ascchat
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
-import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,11 +16,9 @@ import com.amity.socialcloud.sdk.chat.AmityChatClient
 import com.amity.socialcloud.sdk.chat.channel.AmityChannel
 import com.amity.socialcloud.sdk.chat.channel.AmityChannelFilter
 import com.amity.socialcloud.sdk.chat.channel.AmityChannelRepository
-import com.amity.socialcloud.sdk.core.AmityTags
 import com.example.ascchat.ChatRoomPage.Companion.EXTRA_CHANNEL
 import com.example.ascchat.chatadapter.ChatAdapter
 import com.example.ascchat.chatadapter.ListListener
-import com.google.gson.JsonObject
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -32,14 +28,33 @@ class RecentChatPage : AppCompatActivity(), ListListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recent_chat_page)
-        val textView = findViewById<TextView>(R.id.channelID)
-        textView.text = "UserId1"
-        findViewById<Button>(R.id.createBtn).setOnClickListener {
-            createConversationChannel(channelRepository, textView.text.toString())
-        }
 
         initChatFragment()
+    }
+
+    override fun onResume() {
+        super.onResume()
         initChannelRepository()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.channel_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.action_add) {
+            val intent = Intent(this, SearchUserPage::class.java)
+            startActivity(intent)
+            return true
+        }
+        if (id == R.id.action_add_image) {
+            val intent = Intent(this, MyAvatarUpdateActivity::class.java)
+            startActivity(intent)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun initChatFragment() {
@@ -52,7 +67,7 @@ class RecentChatPage : AppCompatActivity(), ListListener {
         }
     }
 
-    fun initChannelRepository() {
+    private fun initChannelRepository() {
         channelRepository = AmityChatClient.newChannelRepository()
         initChannel(channelRepository)
     }
@@ -77,24 +92,6 @@ class RecentChatPage : AppCompatActivity(), ListListener {
                 .subscribeOn(Schedulers.io())
                 .observeOn((AndroidSchedulers.mainThread()))
         )
-    }
-
-    fun createConversationChannel(channelRepository: AmityChannelRepository, userId: String) {
-        // create channel and let SDK handle channelId generation
-        channelRepository.createChannel()
-            .conversationType()
-            .withUserId(userId = userId)
-            .displayName(displayName = userId) // optional
-            .tags(tags = AmityTags(listOf("friends"))) // optional
-            .build()
-            .create()
-            .doOnError {
-                Toast.makeText(applicationContext,it.message,Toast.LENGTH_SHORT).show()
-            }
-            .doOnSuccess {
-                //success
-            }
-            .subscribe()
     }
 
     override fun onItemClick(chatItem: AmityChannel, position: Int, holder: View) {

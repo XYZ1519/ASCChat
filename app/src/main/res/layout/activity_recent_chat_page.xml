@@ -6,30 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".RecentChatPage">
 
-    <EditText
-        android:id="@+id/channelID"
-        android:hint="channelName"
-        android:layout_width="match_parent"
-        android:layout_marginRight="100dp"
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:text="Channel List"
+        android:textSize="20dp"
+        android:padding="5dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/channelListRecycler"/>
-
-    <Button
-        android:id="@+id/createBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SUBMIT"
-        app:layout_constraintStart_toEndOf="@+id/channelID"
-        app:layout_constraintBottom_toTopOf="@+id/channelListRecycler"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/channelListRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/channelID"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

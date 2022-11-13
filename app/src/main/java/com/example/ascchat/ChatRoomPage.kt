@@ -32,6 +32,7 @@ open class ChatRoomPage : AppCompatActivity(), ListListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_room_page)
+        title = getChannelTitle()
         initMessageFragment()
         initMessageRepository()
         setUpSendButton()
@@ -45,7 +46,7 @@ open class ChatRoomPage : AppCompatActivity(), ListListener {
     }
 
     private fun initMessageRepository() {
-        val channelQuery = getMessageCollection()
+        val channelQuery = getMessageCollection(getChannelId())
         channelQuery.observe(this) {
             if ((messageAdapter?.itemCount ?: Int.MAX_VALUE) < it.size) {
                 messageAdapter?.submitList(it)
@@ -73,7 +74,7 @@ open class ChatRoomPage : AppCompatActivity(), ListListener {
         message_send_button.setOnClickListener {
             val text = message_edittext.text.toString().trim()
             message_edittext.text = null
-            createTextMessage(text)
+            createTextMessage(text, getChannelId())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError { t ->
                     val amityError = AmityError.from(t)
@@ -89,9 +90,9 @@ open class ChatRoomPage : AppCompatActivity(), ListListener {
         }
     }
 
-    fun getMessageCollection(): LiveData<PagedList<AmityMessage>> {
+    fun getMessageCollection(channelId: String): LiveData<PagedList<AmityMessage>> {
         return LiveDataReactiveStreams.fromPublisher(
-            messageRepository.getMessages(getChannelId())
+            messageRepository.getMessages(channelId)
                 .build()
                 .query()
         )
@@ -102,8 +103,13 @@ open class ChatRoomPage : AppCompatActivity(), ListListener {
         return channel?.getChannelId() ?: ""
     }
 
-    fun createTextMessage(text: String): Completable {
-        return messageRepository.createMessage(getChannelId())
+    private fun getChannelTitle() : String {
+        val channel = intent.getParcelableExtra<AmityChannel>(EXTRA_CHANNEL)
+        return channel?.getDisplayName() ?: ""
+    }
+
+    fun createTextMessage(text: String, channelId: String): Completable {
+        return messageRepository.createMessage(channelId)
             .with()
             .text(text)
             .build()
