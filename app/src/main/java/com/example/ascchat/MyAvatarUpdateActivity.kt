@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
+import coil.load
 import com.amity.socialcloud.sdk.AmityCoreClient
 import com.amity.socialcloud.sdk.core.file.AmityUploadResult
 import com.amity.socialcloud.sdk.core.user.AmityUser
@@ -155,22 +156,14 @@ class MyAvatarUpdateActivity : AppCompatActivity() {
     private fun setImage() {
         sendButton.isEnabled = false
         textview.visibility = View.VISIBLE
-        sendButton.isEnabled = true
-        textview.visibility = View.GONE
-        /*Glide.with(this).clear(imageview)
-
         BitmapFactory.decodeFile(currentPhotoPath)?.also { bitmap ->
-
-            Glide.with(this)
-                    .load(bitmap)
-                    .into(imageview)
-
+            imageview.load(bitmap)
+            sendButton.isEnabled = true
+            textview.visibility = View.GONE
             val f = File(currentPhotoPath)
             val contentUri = Uri.fromFile(f)
             currentPhotoUri = contentUri
-
-
-        }*/
+        }
     }
 
     private fun updateUserAvatar() {
